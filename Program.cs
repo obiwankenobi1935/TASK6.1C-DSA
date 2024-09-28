@@ -1,17 +1,15 @@
 ﻿using System;
 
+
 class Program
 {
     static bool FindPairWithSum(int[] S, int x)
     {
-        // Step 1: Sort the array
-        Array.Sort(S);  // O(n log n)
+        MergeSort(S, 0, S.Length - 1);  // Sorting using Merge Sort
         
-        // Step 2: Initialize two pointers
         int left = 0;
         int right = S.Length - 1;
         
-        // Step 3: Use two-pointer technique to find the pair
         while (left < right)
         {
             int currentSum = S[left] + S[right];
@@ -19,12 +17,71 @@ class Program
             if (currentSum == x)
                 return true;
             else if (currentSum < x)
-                left++;  // Move left pointer to increase sum
+                left++;
             else
-                right--; // Move right pointer to decrease sum
+                right--;
         }
         
-        return false;  // No pair found
+        return false;
+    }
+
+    // Merge Sort Algorithm (O(n log n))
+    static void MergeSort(int[] arr, int left, int right)
+    {
+        if (left < right)
+        {
+            int mid = (left + right) / 2;
+
+            MergeSort(arr, left, mid);
+            MergeSort(arr, mid + 1, right);
+
+            Merge(arr, left, mid, right);
+        }
+    }
+
+    static void Merge(int[] arr, int left, int mid, int right)
+    {
+        int n1 = mid - left + 1;
+        int n2 = right - mid;
+
+        int[] L = new int[n1];
+        int[] R = new int[n2];
+
+        for (int i = 0; i < n1; i++)
+            L[i] = arr[left + i];
+        for (int j = 0; j < n2; j++)
+            R[j] = arr[mid + 1 + j];
+
+        int i1 = 0, j1 = 0, k = left;
+
+        while (i1 < n1 && j1 < n2)
+        {
+            if (L[i1] <= R[j1])
+            {
+                arr[k] = L[i1];
+                i1++;
+            }
+            else
+            {
+                arr[k] = R[j1];
+                j1++;
+            }
+            k++;
+        }
+
+        while (i1 < n1)
+        {
+            arr[k] = L[i1];
+            i1++;
+            k++;
+        }
+
+        while (j1 < n2)
+        {
+            arr[k] = R[j1];
+            j1++;
+            k++;
+        }
     }
 
     static void Main()
@@ -36,6 +93,8 @@ class Program
         Console.WriteLine(result ? "Pair found" : "No pair found");
     }
 }
+
+
 
 class MinStack
 {
